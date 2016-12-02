@@ -11,6 +11,7 @@ namespace AdventOfCode2016
       static void Main(string[] args)
       {
          Day1.Process();
+		 Day2.Process();
          Console.ReadKey();
       }
    }
