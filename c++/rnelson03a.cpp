@@ -2,7 +2,7 @@
  * Advent of Code 2016
  * Day 3 (part 1)
  *
- * Command: clang++ --std=c++14 rnelson03a.cpp
+ * Command: clang++ --std=c++14 -I/usr/local/include -L/usr/local/lib rnelson03a.cpp
  *
  */
 
