@@ -2,7 +2,7 @@
  * Advent of Code 2016
  * Day 2 (part 1)
  *
- * Command: clang++ --std=c++14 day02a.cpp
+ * Command: clang++ --std=c++14 rnelson02a.cpp
  *
  */
 
