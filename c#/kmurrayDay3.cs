@@ -6,17 +6,18 @@ namespace AdventOfCode2016 {
    class Day3 {
       private static readonly string[] Delimeter = new string[] { " " };
       private static int _possible;
-      private static int _impossible;
 
       public static void Process() {
          var inputFile = File.ReadAllText(Path.Combine("Inputs", "Day3a.txt")).Replace("\r", "").Split('\n');
 
          RowProcess(inputFile);
+         Console.WriteLine("Possible = " + _possible);
          ColumnProcess(inputFile);
+         Console.WriteLine("Possible = " + _possible);
       }
 
       private static void RowProcess(IEnumerable<string> inputFile) {
-         _possible = _impossible = 0;
+         _possible = 0;
 
          foreach (var line in inputFile) {
             
@@ -27,22 +28,16 @@ namespace AdventOfCode2016 {
                   && (Convert.ToInt32(side[0]) + Convert.ToInt32(side[2])) > Convert.ToInt32(side[1])) {
                ++_possible;
             }
-            else {
-               ++_impossible;
-            }
          }
-         Console.WriteLine("Possible = " + _possible + " impossible = " + _impossible);
       }
 
       private static void ColumnProcess(IEnumerable<string> inputFile) {
          var columnSet = new List<string[]>();
          var counter = 0;
-         _possible = _impossible = 0;
+         _possible = 0;
 
          foreach (var line in inputFile) {
-            
-            var side = line.Split(Delimeter, StringSplitOptions.RemoveEmptyEntries);
-            columnSet.Add(side);
+            columnSet.Add(line.Split(Delimeter, StringSplitOptions.RemoveEmptyEntries));
             ++counter;
 
             if (counter != 3)
@@ -53,14 +48,10 @@ namespace AdventOfCode2016 {
                    && (Convert.ToInt32(columnSet[0][row]) + Convert.ToInt32(columnSet[2][row])) > Convert.ToInt32(columnSet[1][row])) {
                   ++_possible;
                }
-               else {
-                  ++_impossible;
-               }
             }
             columnSet.Clear();
             counter = 0;
          }
-         Console.WriteLine("Possible = " + _possible + " impossible = " + _impossible);
       }
    }
 }
