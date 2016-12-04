@@ -2,7 +2,7 @@
  * Advent of Code 2016
  * Day 4 (part 2)
  *
- * Command: clang++ --std=c++14 day04b.cpp
+ * Command: clang++ --std=c++14 rnelson04b.cpp
  * Sources:
  *		http://stackoverflow.com/a/217605/187404 (rtrim())
  *
