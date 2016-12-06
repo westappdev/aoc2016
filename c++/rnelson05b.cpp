@@ -49,13 +49,13 @@ int main(void) {
 			bool validLocation = location >= '0' && location <= '7';
 
 			if (validLocation) {
-				int index = (char)(location - '0');
+				int chLocation = (char)(location - '0');
 
-				if (password.at(index) == '_') {
-					password.at(index) = ch;
+				if (password.at(chLocation) == '_') {
+					password.at(chLocation) = ch;
 				}
 
-				//cout << "Current password: " << password << endl;
+				//cout << "Current password: " << password << " (suffix = " << index << ")" << endl;
 			}
 		}
 
