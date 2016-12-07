@@ -1,20 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AdventOfCode2016
 {
-   class Day1
+   internal static class Day1
    {
+      private enum Direction
+      {
+         North,
+         East,
+         South,
+         West
+      };
+
       public static void Process()
       {
          var xposition = 0;
          var yposition = 0;
-         HashSet<String> vectors = new HashSet<string>();
-         vectors.Add("0,0");
+         var vectors = new HashSet<string>();
 
          FindPosition(ref xposition, ref yposition, vectors);
 
@@ -23,75 +27,81 @@ namespace AdventOfCode2016
       }
 
       private static void AddPoint(int xpos, int ypos, int move, int xmove, HashSet<String> vectors) {
-         for (var count = 0; count < move ; ++count) {
-            if (xmove == 0) {
-               if (vectors.Contains(xpos + "," + (ypos + count))) {
-                  Console.WriteLine("Intersection at " + xpos + "," + (ypos + count) + " Distance from home = " + (Math.Abs(xpos) + Math.Abs(ypos + count)));
-               }
-               vectors.Add(xpos + "," + (ypos + count));
-            }
-            else if (xmove == 1) {
-               if (vectors.Contains((xpos + count) + "," + ypos))
-               {
-                  Console.WriteLine("Intersection at " + (xpos + count) + "," + ypos + " Distance from home = " + (Math.Abs(xpos + count) + Math.Abs(ypos)));
-               }
-               vectors.Add((xpos + count) + "," + ypos);
+
+         var direction = (move < 0) ? -1 : 1;
+
+         for (var count = 0; count < Math.Abs(move) ; ++count) {
+            switch (xmove)
+            {
+                case 0 :
+                    if (vectors.Contains(xpos + "," + (ypos + (count * direction)))) {
+                        Console.WriteLine("Intersection at " + xpos + "," + (ypos + (count * direction)) + " Distance from home = " + (Math.Abs(xpos) + Math.Abs(ypos + count)));
+                    }
+                    vectors.Add(xpos + "," + (ypos + count));
+                    break;
+                case 1 :
+                    if (vectors.Contains((xpos + (count * direction)) + "," + ypos))
+                    {
+                        Console.WriteLine("Intersection at " + (xpos + (count * direction)) + "," + ypos + " Distance from home = " + (Math.Abs(xpos + count) + Math.Abs(ypos)));
+                    }
+                    vectors.Add((xpos + (count * direction)) + "," + ypos);
+                    break;
             }
          }
       }
 
       private static void FindPosition(ref int xpos, ref int ypos, HashSet<String> vectors) {
          var inputFile = File.ReadAllText(Path.Combine("Inputs", "Day1a.txt")).Replace("\r", "").Replace("\n", "").Replace(" ", "").Split(',');
-         var position = 0;
+         var position = Direction.North;
          
          foreach (var move in inputFile) {
 
             if (move.Substring(0, 1).Equals("R", StringComparison.InvariantCultureIgnoreCase)) {
 
                switch (position) {
-                  case 0: // North
+                  case Direction.North:
                      AddPoint(xpos, ypos, Convert.ToInt32(move.Substring(1, move.Length - 1)), 1, vectors);
                      xpos += Convert.ToInt32(move.Substring(1, move.Length - 1));
-                     position = 1;
+                     position = Direction.East;
                      break;
-                  case 1: // East
+                  case Direction.East:
                      AddPoint(xpos, ypos, -(Convert.ToInt32(move.Substring(1, move.Length - 1))), 0, vectors);
                      ypos -= Convert.ToInt32(move.Substring(1, move.Length - 1));
-                     position = 2;
+                     position = Direction.South;
                      break;
-                  case 2: // South
+                  case Direction.South:
                      AddPoint(xpos, ypos, -(Convert.ToInt32(move.Substring(1, move.Length - 1))), 1, vectors);
                      xpos -= Convert.ToInt32(move.Substring(1, move.Length - 1));
-                     position = 3;
+                     position = Direction.West;
                      break;
-                  case 3: // West
+                  case Direction.West:
                      AddPoint(xpos, ypos, Convert.ToInt32(move.Substring(1, move.Length - 1)), 0, vectors);
                      ypos += Convert.ToInt32(move.Substring(1, move.Length - 1));
-                     position = 0;
+                     position = Direction.North;
                      break;
                }
             }
             else if (move.Substring(0, 1).Equals("L", StringComparison.CurrentCultureIgnoreCase)) {
                switch (position) {
-                  case 0: // North
+                  case Direction.North:
                      AddPoint(xpos, ypos, -(Convert.ToInt32(move.Substring(1, move.Length - 1))), 1, vectors);
                      xpos -= Convert.ToInt32(move.Substring(1, move.Length - 1));
-                     position = 3;
+                     position = Direction.West;
                      break;
-                  case 1: // East
+                  case Direction.East:
                      AddPoint(xpos, ypos, Convert.ToInt32(move.Substring(1, move.Length - 1)), 0, vectors);
                      ypos += Convert.ToInt32(move.Substring(1, move.Length - 1));
-                     position = 0;
+                     position = Direction.North;
                      break;
-                  case 2: // South
+                  case Direction.South:
                      AddPoint(xpos, ypos, Convert.ToInt32(move.Substring(1, move.Length - 1)), 1, vectors);
                      xpos += Convert.ToInt32(move.Substring(1, move.Length - 1));
-                     position = 1;
+                     position = Direction.East;
                      break;
-                  case 3: // West
+                  case Direction.West:
                      AddPoint(xpos, ypos, -(Convert.ToInt32(move.Substring(1, move.Length - 1))), 0, vectors);
                      ypos -= Convert.ToInt32(move.Substring(1, move.Length - 1));
-                     position = 2;
+                     position = Direction.South;
                      break;
                }
             }
@@ -99,7 +109,6 @@ namespace AdventOfCode2016
       }
    }
 }
-
 /*
 --- Day 1: No Time for a Taxicab ---
 
