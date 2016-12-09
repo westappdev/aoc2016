@@ -13,20 +13,21 @@ namespace AdventOfCode2016
       }
 
       private static long RecurseDecompress(string input, int index) {
-
          long length = 0;
         
          for (; index < input.Length; ++index) {
             if (input[index].Equals('(')) {
-               var formula = input.Substring(index + 1, (input.IndexOf(')', index) - 1) - index).Split('x');
 
+               var formula            = input.Substring(index + 1, (input.IndexOf(')', index) - 1) - index).Split('x');
                var numberOfCharacters = Convert.ToInt32(formula[0]);
+               var times              = Convert.ToInt32(formula[1]);
+
                if (input.Substring(input.IndexOf(')', index) + 1, numberOfCharacters).Contains("(")) {
-                  length += Convert.ToInt32(formula[1]) * RecurseDecompress(input.Substring(input.IndexOf(')', index) + 1, numberOfCharacters), 0);
+                  length += times * RecurseDecompress(input.Substring(input.IndexOf(')', index) + 1, numberOfCharacters), 0);
                   index = input.IndexOf(')', index) + numberOfCharacters;
                }
                else {
-                  length += (Convert.ToInt32(formula[0]) * Convert.ToInt32(formula[1]));
+                  length += (numberOfCharacters * times);
                   index = input.IndexOf(')', index) + numberOfCharacters; 
                }
             }
@@ -38,27 +39,24 @@ namespace AdventOfCode2016
          return length;
       }
 
-      private static long Decompress(string input, bool recurse)
-      {
+      private static long Decompress(string input, bool recurse) {
          long length = 0;
 
          for (var index = 0; index < input.Length; ++index) {
 
             if (input[index].Equals('(')) {
 
-               var formula = input.Substring(index + 1, (input.IndexOf(')', index) - 1) - index).Split('x');
-
+               var formula            = input.Substring(index + 1, (input.IndexOf(')', index) - 1) - index).Split('x');
                var numberOfCharacters = Convert.ToInt32(formula[0]);
-               var times = Convert.ToInt32(formula[1]);
+               var times              = Convert.ToInt32(formula[1]);
+               var endOfString        = input.IndexOf(')', index) + numberOfCharacters;
 
-               var endOfString = input.IndexOf(')', index) + numberOfCharacters;
-
-                  if (input.Substring(input.IndexOf(')', index) + 1, numberOfCharacters).Contains("(") && recurse) {
-                     length += (times * RecurseDecompress(input.Substring(input.IndexOf(')', index) + 1, numberOfCharacters), 0));
-                  }
-                  else {
-                     length += (numberOfCharacters * times);
-                  }
+               if (input.Substring(input.IndexOf(')', index) + 1, numberOfCharacters).Contains("(") && recurse) {
+                  length += (times * RecurseDecompress(input.Substring(input.IndexOf(')', index) + 1, numberOfCharacters), 0));
+               }
+               else {
+                  length += (numberOfCharacters * times);
+               }
 
                index = endOfString; 
             }
