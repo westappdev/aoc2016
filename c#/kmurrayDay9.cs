@@ -1,42 +1,13 @@
 ﻿using System;
 using System.IO;
 
-namespace AdventOfCode2016
-{
-   internal static class Day9
-   {
+namespace AdventOfCode2016 {
+   internal static class Day9 {
       public static void Process() {
          var inputFile = File.ReadAllText(Path.Combine("Inputs", "Day9a.txt")).Replace("\r", "");
 
          Console.WriteLine("Total string length = " + Decompress(inputFile, false));
          Console.WriteLine("Total recursive string length = " + Decompress(inputFile, true));
-      }
-
-      private static long RecurseDecompress(string input, int index) {
-         long length = 0;
-        
-         for (; index < input.Length; ++index) {
-            if (input[index].Equals('(')) {
-
-               var formula            = input.Substring(index + 1, (input.IndexOf(')', index) - 1) - index).Split('x');
-               var numberOfCharacters = Convert.ToInt32(formula[0]);
-               var times              = Convert.ToInt32(formula[1]);
-
-               if (input.Substring(input.IndexOf(')', index) + 1, numberOfCharacters).Contains("(")) {
-                  length += times * RecurseDecompress(input.Substring(input.IndexOf(')', index) + 1, numberOfCharacters), 0);
-                  index = input.IndexOf(')', index) + numberOfCharacters;
-               }
-               else {
-                  length += (numberOfCharacters * times);
-                  index = input.IndexOf(')', index) + numberOfCharacters; 
-               }
-            }
-            else {
-               ++length;
-            }
-         }
-
-         return length;
       }
 
       private static long Decompress(string input, bool recurse) {
@@ -52,13 +23,13 @@ namespace AdventOfCode2016
                var endOfString        = input.IndexOf(')', index) + numberOfCharacters;
 
                if (input.Substring(input.IndexOf(')', index) + 1, numberOfCharacters).Contains("(") && recurse) {
-                  length += (times * RecurseDecompress(input.Substring(input.IndexOf(')', index) + 1, numberOfCharacters), 0));
+                  length += (times * Decompress(input.Substring(input.IndexOf(')', index) + 1, numberOfCharacters), true));
                }
                else {
                   length += (numberOfCharacters * times);
                }
 
-               index = endOfString; 
+               index = endOfString;
             }
             else {
                ++length;
