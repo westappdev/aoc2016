@@ -9,30 +9,12 @@
 #include <algorithm>
 #include <fstream>
 #include <iostream>
-#include <sstream>
 #include <string>
-#include <vector>
 
 using namespace std;
 
 const string INPUT_FILE = "input16.txt";
-const int MAX_LINE_LENGTH = 2000;
 const int SIZE = 272;
-
-void split(const string &s, char delim, vector<string> &elems) {
-	stringstream ss;
-	ss.str(s);
-	string item;
-	while (getline(ss, item, delim)) {
-		elems.push_back(item);
-	}
-}
-
-vector<string> split(const string &s, char delim) {
-	vector<string> elems;
-	split(s, delim, elems);
-	return elems;
-}
 
 string generateData(string input, size_t length) {
 	auto a = input;
